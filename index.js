@@ -34,8 +34,10 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/media", async (req, res) => {
-      const result = await mediaCollection.find().toArray();
+    app.get("/media/:brand", async (req, res) => {
+      const brand = req.params.brand;
+      const query = { brandName: brand };
+      const result = await mediaCollection.find(query).toArray();
       console.log(result);
       res.send(result);
     });
