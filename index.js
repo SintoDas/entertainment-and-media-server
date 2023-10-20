@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 5000;
 // password 2INcDjEHBXnt89UF
@@ -38,6 +38,13 @@ async function run() {
       const brand = req.params.brand;
       const query = { brandName: brand };
       const result = await mediaCollection.find(query).toArray();
+      console.log(result);
+      res.send(result);
+    });
+    app.get("/single/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await mediaCollection.findOne(query);
       console.log(result);
       res.send(result);
     });
