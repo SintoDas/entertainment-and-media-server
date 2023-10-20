@@ -2,13 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
+require("dotenv").config();
 const port = process.env.PORT || 5000;
-// password 2INcDjEHBXnt89UF
-//
-// user sintodas1996
 
-const uri =
-  "mongodb+srv://sintodas1996:2INcDjEHBXnt89UF@cluster0.kjin4dh.mongodb.net/?retryWrites=true&w=majority";
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.kjin4dh.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -46,6 +43,39 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await mediaCollection.findOne(query);
       console.log(result);
+      res.send(result);
+    });
+    app.get("/update/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await mediaCollection.findOne(query);
+      console.log(result);
+      res.send(result);
+    });
+
+    // update single user
+    app.put("/update/:id", async (req, res) => {
+      const id = req.params.id;
+      const data = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedUSer = {
+        $set: {
+          img: data.img,
+          name: data.name,
+          brandName: data.brandName,
+          type: data.type,
+          price: data.price,
+          description: data.description,
+          rating: data.rating,
+        },
+      };
+
+      const result = await mediaCollection.updateOne(
+        filter,
+        updatedUSer,
+        options
+      );
       res.send(result);
     });
 
