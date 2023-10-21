@@ -23,6 +23,7 @@ async function run() {
 
     // creating database
     const mediaCollection = client.db("mediaDB").collection("media");
+    // const cartCollection = client.db("cartDB").collection("cart");
 
     app.post("/media", async (req, res) => {
       const media = req.body;
@@ -30,6 +31,12 @@ async function run() {
       console.log(result);
       res.send(result);
     });
+    // app.post("/cart", async (req, res) => {
+    //   const cart = req.body;
+    //   const result = await cartCollection.insertOne(cart);
+    //   console.log(result);
+    //   res.send(result);
+    // });
 
     app.get("/media/:brand", async (req, res) => {
       const brand = req.params.brand;
@@ -53,6 +60,13 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/cart/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await mediaCollection.findOne(query);
+      console.log(result);
+      res.send(result);
+    });
     // update single user
     app.put("/update/:id", async (req, res) => {
       const id = req.params.id;
